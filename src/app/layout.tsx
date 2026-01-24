@@ -1,20 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "../styles/globals.css";
 import { Providers } from "./providers";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const montserrat = Montserrat({
+  variable: "--montserrat",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Redux Starter",
-  description: "starter template for redux",
+  title: "Event Management SMT",
+  description: "Worlds largest event management system",
 };
 
 export default function RootLayout({
@@ -24,9 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${montserrat.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>
