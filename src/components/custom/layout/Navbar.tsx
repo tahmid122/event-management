@@ -14,6 +14,7 @@ import NavLink from "../reuseable/NavLink";
 import { Button } from "@/components/ui/button";
 import MobileNavlinks from "./MobileNavlinks";
 import Logo from "../reuseable/Logo";
+import NavbarActionButtonsClient from "./NavbarActionButtonsClient";
 
 const Navbar = () => {
   return (
@@ -52,20 +53,7 @@ const Navbar = () => {
             </li>
           </ul>
           {/* buttons */}
-          <div className="hidden lg:flex items-center gap-2">
-            <Link href={"/login"}>
-              <Button className="bg-transparent uppercase text-pinkish font-bold border border-pinkish hover:bg-white hover:text-black transition-all duration-300 cursor-pointer">
-                <FaSignInAlt />
-                Login
-              </Button>
-            </Link>
-            <Link href={"/signup"}>
-              <Button className="bg-white text-black font-semibold uppercase hover:bg-pinkish hover:text-white transition-all duration-300 cursor-pointer">
-                <FaUserPlus />
-                Signup
-              </Button>
-            </Link>
-          </div>
+          <NavbarActionButtonsClient />
           {/* Mobile Nav */}
           <MobileNavlinks />
         </div>
