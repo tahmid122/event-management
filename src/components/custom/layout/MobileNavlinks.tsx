@@ -31,7 +31,6 @@ const MobileNavlinks = () => {
   const user = useAppSelector(useCurrentUser);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  console.log(user);
   const [logoutUser, { isLoading }] = useLogoutUserMutation();
   const handleLogout = async () => {
     const res = await logoutUser(null).unwrap();

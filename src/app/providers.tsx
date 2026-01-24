@@ -14,7 +14,7 @@ export function Providers({ children }: ProvidersProps) {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Toaster richColors position="top-center" />
+        <Toaster richColors position="top-center" theme="dark" />
         {children}
       </PersistGate>
     </Provider>

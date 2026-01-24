@@ -13,7 +13,6 @@ const NavbarActionButtonsClient = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector(useCurrentUser);
-  console.log(user);
   const [logoutUser, { isLoading }] = useLogoutUserMutation();
   const handleLogout = async () => {
     const res = await logoutUser(null).unwrap();
@@ -29,7 +28,9 @@ const NavbarActionButtonsClient = () => {
     <div className="hidden lg:flex items-center gap-2">
       {user?.email ? (
         <>
-          <h5 className="font-bold mr-5">{user.name}</h5>
+          <Link href={"/profile"} className="font-bold mr-5">
+            {user.name}
+          </Link>
           <Button
             onClick={handleLogout}
             className="bg-transparent uppercase text-pinkish font-bold border border-pinkish hover:bg-white hover:text-black transition-all duration-300 cursor-pointer"
