@@ -134,4 +134,7 @@ body {
   .text-whiter {
     @apply text-slate-200;
   }
+  .uni-gap {
+    @apply py-10;
+  }
 }

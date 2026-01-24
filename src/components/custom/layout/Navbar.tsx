@@ -59,7 +59,7 @@ const Navbar = () => {
                 Login
               </Button>
             </Link>
-            <Link href={"/login"}>
+            <Link href={"/signup"}>
               <Button className="bg-white text-black font-semibold uppercase hover:bg-pinkish hover:text-white transition-all duration-300 cursor-pointer">
                 <FaUserPlus />
                 Signup
