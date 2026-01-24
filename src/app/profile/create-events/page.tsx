@@ -1,7 +1,11 @@
-import React from "react";
+import CreateEventForm from "./CreateEventForm";
 
-const CreateEvents = () => {
-  return <div>CreateEvents</div>;
+const CreateEvent = () => {
+  return (
+    <div className="h-full flex items-center justify-center">
+      <CreateEventForm />
+    </div>
+  );
 };
 
-export default CreateEvents;
+export default CreateEvent;
