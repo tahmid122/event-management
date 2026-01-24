@@ -16,7 +16,7 @@ import MobileNavlinks from "./MobileNavlinks";
 
 const Navbar = () => {
   return (
-    <header className="bg-black sticky top-0 left-0 py-4">
+    <header className="bg-black sticky top-0 left-0 py-4 border-b border-b-slate-900">
       <nav className="container text-whiter">
         {/* main */}
         <div className="flex items-center justify-between">
