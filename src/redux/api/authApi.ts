@@ -13,7 +13,16 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    loginUser: builder.mutation<TAuthResponse, TLoginSignup>({
+      query: (userInfo) => {
+        return {
+          url: "/api/auth/sign-in/email",
+          method: "POST",
+          body: userInfo,
+        };
+      },
+    }),
   }),
 });
 
-export const { useSignupUserMutation } = authApi;
+export const { useSignupUserMutation, useLoginUserMutation } = authApi;
