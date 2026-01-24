@@ -13,6 +13,7 @@ import Link from "next/link";
 import NavLink from "../reuseable/NavLink";
 import { Button } from "@/components/ui/button";
 import MobileNavlinks from "./MobileNavlinks";
+import Logo from "../reuseable/Logo";
 
 const Navbar = () => {
   return (
@@ -20,12 +21,7 @@ const Navbar = () => {
       <nav className="container text-whiter">
         {/* main */}
         <div className="flex items-center justify-between">
-          <Link
-            href={"/"}
-            className="text-xl lg:text-2xl font-semibold text-pinkish"
-          >
-            Event SMT
-          </Link>
+          <Logo />
           {/* nav links */}
           <ul className="hidden lg:flex items-center gap-10">
             <li>

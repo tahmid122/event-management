@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "../styles/globals.css";
 import { Providers } from "./providers";
 import Navbar from "@/components/custom/layout/Navbar";
+import Footer from "@/components/custom/layout/Footer";
 
 const montserrat = Montserrat({
   variable: "--montserrat",
@@ -24,7 +25,8 @@ export default function RootLayout({
       <body className={`${montserrat.variable} antialiased`}>
         <Providers>
           <Navbar />
-          {children}
+          <main className="min-h-screen">{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>
