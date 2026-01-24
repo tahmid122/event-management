@@ -11,20 +11,34 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useSignupUserMutation } from "@/redux/api/authApi";
 import { TLoginSignup } from "@/types/loginSingup";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { toast } from "sonner";
 
 export default function SignupForm() {
+  const router = useRouter();
+  // redux
+  const [userSignUp, { isLoading }] = useSignupUserMutation();
   const [credential, setCredential] = useState<TLoginSignup>({
     name: "",
     email: "",
     password: "",
   });
   //   handle submit
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(credential);
+    const res = await userSignUp(credential).unwrap();
+    console.log(res);
+    if (res?.user?.email) {
+      toast.success("Signup successful");
+      router.push("/login");
+    } else {
+      toast.error("Something went wrong !");
+    }
   };
   return (
     <Card className="w-full max-w-sm bg-black text-whiter border-slate-900 ">
@@ -95,7 +109,7 @@ export default function SignupForm() {
           </div>
 
           <Button type="submit" className="w-full mt-5 cursor-pointer">
-            Signup
+            {isLoading ? "Signing..." : "Signup"}
           </Button>
         </form>
       </CardContent>
