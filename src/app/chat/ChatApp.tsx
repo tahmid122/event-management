@@ -2,107 +2,116 @@
 
 import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
+import { useAppSelector } from "@/redux/store";
+import { useCurrentUser } from "@/redux/authSlice";
 
 type ChatMessage = {
   id: string;
-  clientId?: string;
   content: string;
   senderId: string;
   senderName?: string;
+  createdAt?: string;
   isMe: boolean;
 };
 
 const WS_URL = "ws://10.0.20.216:5000";
-const MY_USER_ID = "cmkupr0mn00008kuyyor21xru";
+const AUTH_TOKEN = Cookies.get("access_token");
 
-const genClientId = () =>
-  "tmp_" + Date.now() + Math.random().toString(36).slice(2);
+const generateId = () =>
+  Date.now().toString() + Math.random().toString(36).slice(2);
 
 const ChatApp = () => {
-  const token = Cookies.get("access_token");
+  const user = useAppSelector(useCurrentUser);
+  const MY_USER_ID = user?.id;
   const socketRef = useRef<WebSocket | null>(null);
-  const didInit = useRef(false);
+  const didInitRef = useRef(false);
 
+  const [isConnected, setIsConnected] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
-  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (didInit.current) return;
-    didInit.current = true;
+    // 🔒 Prevent React 18 StrictMode double connect
+    if (didInitRef.current) return;
+    didInitRef.current = true;
 
-    const ws = new WebSocket(`${WS_URL}/?token=${token}`);
+    const ws = new WebSocket(`${WS_URL}/?token=${AUTH_TOKEN}`);
     socketRef.current = ws;
 
-    ws.onopen = () => setIsConnected(true);
-
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.type !== "MESSAGE") return;
-
-      const msg = data.message;
-
-      setMessages((prev) => {
-        // 🔁 Replace optimistic message
-        const index = prev.findIndex(
-          (m) =>
-            m.isMe && m.content === msg.content && m.senderId === msg.senderId,
-        );
-
-        if (index !== -1) {
-          const updated = [...prev];
-          updated[index] = {
-            id: msg.id,
-            content: msg.content,
-            senderId: msg.senderId,
-            senderName: msg.sender?.name,
-            isMe: true,
-          };
-          return updated;
-        }
-
-        // 📩 Message from other user
-        return [
-          ...prev,
-          {
-            id: msg.id,
-            content: msg.content,
-            senderId: msg.senderId,
-            senderName: msg.sender?.name,
-            isMe: msg.senderId === MY_USER_ID,
-          },
-        ];
-      });
+    ws.onopen = () => {
+      console.log("✅ WebSocket Connected");
+      setIsConnected(true);
     };
 
-    ws.onclose = () => setIsConnected(false);
+    ws.onmessage = (event) => {
+      console.log("📩 Received:", event.data);
 
-    return () => ws.close();
+      try {
+        const data = JSON.parse(event.data);
+
+        if (data.type === "MESSAGE" && data.message) {
+          const msg = data.message;
+
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: msg.id,
+              content: msg.content,
+              senderId: msg.senderId,
+              senderName: msg.sender?.name,
+              createdAt: msg.createdAt,
+              isMe: msg.senderId === MY_USER_ID,
+            },
+          ]);
+        }
+      } catch (err) {
+        console.error("❌ Message parse error:", err);
+      }
+    };
+
+    ws.onerror = (err) => {
+      console.error("❌ WebSocket error:", err);
+    };
+
+    ws.onclose = (e) => {
+      console.log("🔌 Socket closed:", e.code);
+      setIsConnected(false);
+      socketRef.current = null;
+    };
+
+    return () => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.close();
+      }
+    };
   }, []);
 
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || !socketRef.current) return;
 
-    const clientId = genClientId();
+    if (
+      !socketRef.current ||
+      socketRef.current.readyState !== WebSocket.OPEN ||
+      !input.trim()
+    ) {
+      return;
+    }
 
-    socketRef.current.send(
-      JSON.stringify({
-        type: "SEND_MESSAGE",
-        receiverId: "vmH3pQL2t9F5FhbBwZ05WygK3Kmzj4o5",
-        chatId: "cmkqq9xcg0000k0uy5e7u8wq7",
-        message: input,
-        clientId,
-      }),
-    );
+    const payload = {
+      type: "SEND_MESSAGE",
+      receiverId: "cmkuztk1g0005h8uybi8wvuyo",
+      chatId: "cmkqq9xcg0000k0uy5e7u8wq7",
+      message: input.trim(),
+    };
 
-    // ⚡ Optimistic
+    socketRef.current.send(JSON.stringify(payload));
+    console.log("📤 Sent:", payload);
+
+    // ⚡ Optimistic UI update
     setMessages((prev) => [
       ...prev,
       {
-        id: clientId,
-        clientId,
+        id: generateId(),
         content: input,
         senderId: MY_USER_ID,
         isMe: true,
@@ -113,21 +122,38 @@ const ChatApp = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-xl mb-4">Chat {isConnected ? "🟢" : "🔴"}</h1>
+    <div className="min-h-screen bg-gray-900 text-white p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <span
+          className={`w-3 h-3 rounded-full ${
+            isConnected ? "bg-green-500" : "bg-red-500"
+          }`}
+        />
+        <h1 className="text-xl font-bold">
+          Chat {isConnected ? "(Online)" : "(Offline)"}
+        </h1>
+      </div>
 
-      <div className="h-96 overflow-y-auto bg-gray-800 p-4 rounded mb-4">
-        {messages.map((m) => (
+      <div className="h-96 overflow-y-auto bg-gray-800 rounded p-4 mb-4">
+        {messages.length === 0 && (
+          <p className="text-gray-400 text-center italic">No messages yet…</p>
+        )}
+
+        {messages.map((msg) => (
           <div
-            key={m.id}
-            className={`mb-2 p-2 rounded max-w-xs ${
-              m.isMe ? "ml-auto bg-blue-600" : "mr-auto bg-gray-700"
+            key={msg.id}
+            className={`mb-2 max-w-xs p-2 rounded ${
+              msg.isMe
+                ? "ml-auto bg-blue-600 text-right"
+                : "mr-auto bg-gray-700"
             }`}
           >
-            {!m.isMe && (
-              <div className="text-xs text-gray-300">{m.senderName}</div>
+            {!msg.isMe && (
+              <div className="text-xs text-gray-300 mb-1">
+                {msg.senderName || "User"}
+              </div>
             )}
-            {m.content}
+            <div>{msg.content}</div>
           </div>
         ))}
       </div>
@@ -136,9 +162,17 @@ const ChatApp = () => {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="flex-1 p-2 rounded text-black"
+          disabled={!isConnected}
+          placeholder={isConnected ? "Type a message…" : "Connecting…"}
+          className="flex-1 p-3 rounded text-whiter border border-slate-900"
         />
-        <button className="bg-blue-600 px-4 rounded">Send</button>
+        <button
+          type="submit"
+          disabled={!isConnected}
+          className="bg-blue-600 px-6 py-3 rounded font-semibold disabled:bg-gray-600"
+        >
+          Send
+        </button>
       </form>
     </div>
   );
