@@ -31,7 +31,7 @@ export default function SignupForm() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await userSignUp(credential).unwrap();
-    if (res?.user?.email) {
+    if (res?.data?.email) {
       toast.success("Signup successful");
       router.push("/login");
     } else {

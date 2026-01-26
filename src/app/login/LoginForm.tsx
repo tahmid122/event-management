@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoginUserMutation } from "@/redux/api/authApi";
-import { setUser } from "@/redux/authSlice";
+import { setToken, setUser } from "@/redux/authSlice";
 import { useAppDispatch } from "@/redux/store";
 import { TLoginSignup } from "@/types/loginSingup";
 import Link from "next/link";
@@ -32,8 +32,10 @@ export default function SignupForm() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await loginUser(credential).unwrap();
-    if (res.token) {
-      dispatch(setUser(res));
+    console.log(res);
+    if (res.success) {
+      dispatch(setUser(res.data));
+      dispatch(setToken(res.data.token));
       toast.success("Login successful");
       router.push("/");
     } else {

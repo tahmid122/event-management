@@ -1,6 +1,7 @@
 import { TLoginSignup } from "@/types/loginSingup";
 import { baseApi } from "./baseApi";
 import { TAuthResponse } from "@/types/authResponse";
+import { TUser } from "@/types/user";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -13,7 +14,14 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
-    loginUser: builder.mutation<TAuthResponse, TLoginSignup>({
+    loginUser: builder.mutation<
+      {
+        success: boolean;
+        message: string;
+        data: { token: string; user: TUser };
+      },
+      TLoginSignup
+    >({
       query: (userInfo) => {
         return {
           url: "/api/auth/signin",
@@ -25,7 +33,7 @@ const authApi = baseApi.injectEndpoints({
     logoutUser: builder.mutation<{ success: boolean }, null>({
       query: () => {
         return {
-          url: "/api/auth/sign-out",
+          url: "/api/auth/signout",
           method: "POST",
         };
       },
