@@ -49,7 +49,7 @@ const Navbar = () => {
               <NavLink text="Blogs" link="/blogs" icon={<FaBlog />} />
             </li>
             <li>
-              <NavLink text="Contact" link="/contact" icon={<FaEnvelope />} />
+              <NavLink text="Chat" link="/chat" icon={<FaEnvelope />} />
             </li>
           </ul>
           {/* buttons */}

@@ -107,6 +107,20 @@ const eventApi = baseApi.injectEndpoints({
         };
       },
     }),
+    // cancel ticket
+    cancelTicket: builder.mutation<
+      { success: boolean; message: string },
+      string
+    >({
+      query: (id) => {
+        return {
+          url: "/api/ticket/cancel",
+          method: "POST",
+          body: { ticket_id: id },
+        };
+      },
+      invalidatesTags: ["bookings"],
+    }),
   }),
 });
 
@@ -120,4 +134,5 @@ export const {
   useGetSingleEventQuery,
   useGetBookingsQuery,
   useBuyTicketMutation,
+  useCancelTicketMutation,
 } = eventApi;

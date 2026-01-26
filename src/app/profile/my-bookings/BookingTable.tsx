@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { TPayment } from "@/types/payment";
 import {
@@ -9,11 +10,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useCancelTicketMutation } from "@/redux/api/eventApi";
 interface Props {
   bookings: TPayment[] | undefined;
 }
 
 const BookingTable = ({ bookings }: Props) => {
+  const [cancelPayment, { isLoading }] = useCancelTicketMutation();
+  // cancel
+  const handleCancelPayment = async (id: string) => {
+    const res = await cancelPayment(id);
+    console.log(res);
+  };
   return (
     <div className="rounded-xl border border-slate-900 bg-black p-6">
       <h2 className="mb-4 text-lg font-semibold text-white">My Bookings</h2>
@@ -62,10 +70,14 @@ const BookingTable = ({ bookings }: Props) => {
                   {new Date(booking.created_at).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="py-3 pr-4 text-center">
-                  {booking.status === "PAID" ? (
+                  {booking.status === "CANCELLED" ? (
                     <span> {booking.status}</span>
                   ) : (
-                    <Button className="bg-red-600 hover:bg-red-700">
+                    <Button
+                      onClick={() => handleCancelPayment(booking.id)}
+                      disabled={isLoading}
+                      className="bg-red-600 hover:bg-red-700"
+                    >
                       Cancel
                     </Button>
                   )}
