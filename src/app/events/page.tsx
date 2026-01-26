@@ -5,7 +5,7 @@ import EventsContainerClient from "./EventsContainerClient";
 
 const Events = () => {
   return (
-    <section>
+    <section className="w-full">
       <EventsContainerClient />
     </section>
   );
