@@ -14,7 +14,6 @@ interface Props {
 }
 
 const BookingTable = ({ bookings }: Props) => {
-  console.log(bookings);
   return (
     <div className="rounded-xl border border-slate-900 bg-black p-6">
       <h2 className="mb-4 text-lg font-semibold text-white">My Bookings</h2>
