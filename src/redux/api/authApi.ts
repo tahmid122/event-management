@@ -7,7 +7,7 @@ const authApi = baseApi.injectEndpoints({
     signupUser: builder.mutation<TAuthResponse, TLoginSignup>({
       query: (userInfo) => {
         return {
-          url: "/api/auth/sign-up/email",
+          url: "/api/auth/signup",
           method: "POST",
           body: userInfo,
         };
@@ -16,7 +16,7 @@ const authApi = baseApi.injectEndpoints({
     loginUser: builder.mutation<TAuthResponse, TLoginSignup>({
       query: (userInfo) => {
         return {
-          url: "/api/auth/sign-in/email",
+          url: "/api/auth/signin",
           method: "POST",
           body: userInfo,
         };

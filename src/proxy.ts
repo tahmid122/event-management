@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {
   const token = request.cookies.get("accessToken")?.value;
-  console.log(token);
   const protectedRoutes = ["/events"];
 
   const isProtectedRoute = protectedRoutes.some((route) =>
