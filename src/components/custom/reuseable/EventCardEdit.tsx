@@ -1,15 +1,42 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import {
+  useDeleteAnEventMutation,
+  usePublishAnEventMutation,
+} from "@/redux/api/eventApi";
+import { useCurrentUser } from "@/redux/authSlice";
+import { useAppSelector } from "@/redux/store";
 import { TEvent } from "@/types/event";
 import Link from "next/link";
 import React from "react";
 import { FaTrash } from "react-icons/fa6";
+import { toast } from "sonner";
 interface Props {
   event: TEvent;
 }
 const EventCardEdit = ({ event }: Props) => {
-  const handleDelete = (id: string | undefined) => {
-    console.log(id);
+  const user = useAppSelector(useCurrentUser);
+  const [deleteAnEvent, { isLoading: isDeleting }] = useDeleteAnEventMutation();
+  //rtk
+  const [publishEvent, { isLoading }] = usePublishAnEventMutation();
+  const handleDelete = async (id: string | undefined) => {
+    if (id) {
+      const res = await deleteAnEvent(id).unwrap();
+      console.log(res);
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    }
+  };
+  // only admin can publish event
+  // publish event
+  const handlePublish = async (id: string | undefined): Promise<void> => {
+    if (id) {
+      const res = await publishEvent(id).unwrap();
+      console.log(res);
+    }
   };
   return (
     <div className="max-w-md rounded-2xl bg-black border border-slate-900 shadow-lg overflow-hidden">
@@ -76,12 +103,21 @@ const EventCardEdit = ({ event }: Props) => {
               View Details
             </Button>
           </Link>
-          <Link href={`/profile/my-events/edit/3333`}>
+          {user?.role === "ADMIN" && (
+            <Button
+              onClick={() => handlePublish(event.id)}
+              className="rounded-full cursor-pointer bg-green-700"
+            >
+              {isLoading ? "Publishing" : "Publish"}
+            </Button>
+          )}
+
+          <Link href={`/profile/my-events/edit/${event.id}`}>
             <Button className="w-full rounded-full cursor-pointer">Edit</Button>
           </Link>
           <Button
             onClick={() => handleDelete(event.id)}
-            className="rounded-full cursor-pointer bg-red-600 hover:bg-red-800"
+            className={`rounded-full cursor-pointer bg-red-600 hover:bg-red-800 ${isDeleting && "animate-spin"}`}
           >
             <FaTrash />
           </Button>
