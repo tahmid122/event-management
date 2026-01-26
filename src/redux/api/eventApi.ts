@@ -45,7 +45,11 @@ const eventApi = baseApi.injectEndpoints({
       invalidatesTags: ["events", "my-events"],
     }),
     // only admin can
-    publishAnEvent: builder.mutation({
+    //publish event
+    publishAnEvent: builder.mutation<
+      { success: boolean; message: string; data: TEvent },
+      string
+    >({
       query: (id: string) => {
         return {
           url: "/api/event/publish",

@@ -34,7 +34,11 @@ const EventCardEdit = ({ event }: Props) => {
   const handlePublish = async (id: string | undefined): Promise<void> => {
     if (id) {
       const res = await publishEvent(id).unwrap();
-      console.log(res);
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
     }
   };
   return (
@@ -102,13 +106,25 @@ const EventCardEdit = ({ event }: Props) => {
               View Details
             </Button>
           </Link>
-          {user?.role === "ADMIN" && (
-            <Button
-              onClick={() => handlePublish(event.id)}
-              className="rounded-full cursor-pointer bg-green-700"
-            >
-              {isLoading ? "Publishing" : "Publish"}
-            </Button>
+          {user?.role === "MANAGER" && (
+            <>
+              {event.status === "ACTIVE" ? (
+                <Button
+                  onClick={() => handlePublish(event.id)}
+                  disabled
+                  className="rounded-full cursor-pointer bg-red-700"
+                >
+                  Unpublish
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handlePublish(event.id)}
+                  className="rounded-full cursor-pointer bg-green-700"
+                >
+                  {isLoading ? "Publishing" : "Publish"}
+                </Button>
+              )}
+            </>
           )}
 
           <Link href={`/profile/my-events/edit/${event.id}`}>
