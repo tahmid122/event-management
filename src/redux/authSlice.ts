@@ -21,11 +21,11 @@ export const authSlice = createSlice({
       const { user, token } = action.payload;
       state.user = user;
       state.token = token;
-      Cookies.set("accessToken", token, { expires: 30 });
+      Cookies.set("access_token", token, { expires: 30 });
     },
     setToken: (state, action) => {
       state.token = action.payload;
-      Cookies.set("accessToken", action.payload, { expires: 30 });
+      Cookies.set("access_token", action.payload, { expires: 30 });
     },
 
     logout: (state) => {
@@ -33,7 +33,7 @@ export const authSlice = createSlice({
       state.token = null;
 
       // Remove token from cookies
-      Cookies.remove("accessToken");
+      Cookies.remove("access_token");
     },
   },
 });

@@ -13,8 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCreateEventMutation } from "@/redux/api/eventApi";
 import { TEvent } from "@/types/event";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
+import { toast } from "sonner";
 const CreateEventForm = () => {
+  const router = useRouter();
   // rtk
   const [createEvent, { isLoading }] = useCreateEventMutation();
   const [date, setDate] = useState<Date>();
@@ -36,7 +39,12 @@ const CreateEventForm = () => {
       date_time: new Date(date || "").toISOString(),
     };
     const res = await createEvent(finalDetails).unwrap();
-    console.log(res);
+    if (res.success) {
+      toast.success("Event successfully created");
+      router.push("/profile/my-events");
+    } else {
+      toast.error("Something went wrong!");
+    }
   };
   return (
     <Card className="w-full max-w-sm bg-black text-whiter border-slate-900 ">

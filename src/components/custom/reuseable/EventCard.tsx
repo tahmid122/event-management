@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { TEvent } from "@/types/event";
 import Link from "next/link";
-import React from "react";
 interface Props {
   event: TEvent;
 }
 const EventCard = ({ event }: Props) => {
+  console.log(event);
   return (
     <div className="max-w-md rounded-2xl bg-black border border-slate-900 shadow-lg overflow-hidden">
       {/* Image */}
@@ -65,7 +65,7 @@ const EventCard = ({ event }: Props) => {
         )}
 
         {/* Action */}
-        <Link href={"/"}>
+        <Link href={`/events/${event.id}`}>
           <Button className="w-full rounded-full cursor-pointer">
             View Details
           </Button>

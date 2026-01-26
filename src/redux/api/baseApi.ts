@@ -48,7 +48,7 @@ const baseQueryWithToken: BaseQueryFn<
   }
 };
 
-const eventTags = ["events"];
+const eventTags = ["events", "event"];
 const userTags = ["user"];
 
 export const baseApi = createApi({
