@@ -1,9 +1,9 @@
-import EditEvent from "./CreateEventForm";
+import UpdateEventForm from "./UpdateEventForm";
 
 const EventEdit = () => {
   return (
     <div className="h-full flex items-center justify-center">
-      <EditEvent />
+      <UpdateEventForm />
     </div>
   );
 };

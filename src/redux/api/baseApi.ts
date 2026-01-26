@@ -33,8 +33,7 @@ const baseQueryWithToken: BaseQueryFn<
 > = async (args, api, extraOptions): Promise<any> => {
   try {
     let result = await baseQuery(args, api, extraOptions);
-
-    if (result.error?.status === 401) {
+    if (result.error?.status === 401 || result.error?.status === 403) {
       api.dispatch(logout()); // logging out the user
       toast.error("Login Expired");
     }

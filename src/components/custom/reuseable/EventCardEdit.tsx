@@ -8,7 +8,6 @@ import { useCurrentUser } from "@/redux/authSlice";
 import { useAppSelector } from "@/redux/store";
 import { TEvent } from "@/types/event";
 import Link from "next/link";
-import React from "react";
 import { FaTrash } from "react-icons/fa6";
 import { toast } from "sonner";
 interface Props {

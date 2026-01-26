@@ -11,14 +11,20 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreateEventMutation } from "@/redux/api/eventApi";
+import {
+  useCreateEventMutation,
+  useUpdateAnEventMutation,
+} from "@/redux/api/eventApi";
 import { TEvent } from "@/types/event";
+import { useParams, useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
-const EditEvent = () => {
+import { toast } from "sonner";
+const UpdateEventForm = () => {
+  const router = useRouter();
+  const { id: paramId }: { id: string } = useParams();
   // rtk
-  const [createEvent, { isLoading }] = useCreateEventMutation();
   const [date, setDate] = useState<Date>();
-
+  const [updateAnEvent, { isLoading }] = useUpdateAnEventMutation();
   const [eventDetails, setEventDetails] = useState<TEvent>({
     name: "",
     location: "",
@@ -30,13 +36,21 @@ const EditEvent = () => {
   // handle submit
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(eventDetails);
-    const finalDetails = {
-      ...eventDetails,
-      date_time: new Date(date || "").toISOString(),
-    };
-    const res = await createEvent(finalDetails).unwrap();
-    console.log(res);
+
+    if (paramId && date) {
+      const finalDetails: TEvent = {
+        ...eventDetails,
+        id: paramId,
+        date_time: new Date(date || "").toISOString(),
+      };
+      const res = await updateAnEvent(finalDetails).unwrap();
+      if (res.success) {
+        toast.success(res.message);
+        router.push("/profile/my-events");
+      } else {
+        toast.error(res.message);
+      }
+    }
   };
   return (
     <Card className="w-full max-w-sm bg-black text-whiter border-slate-900 ">
@@ -130,4 +144,4 @@ const EditEvent = () => {
   );
 };
 
-export default EditEvent;
+export default UpdateEventForm;
