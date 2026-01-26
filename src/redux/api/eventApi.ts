@@ -3,7 +3,11 @@ import { baseApi } from "./baseApi";
 
 const eventApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllEvents: builder.query<{ data: TEvent[] }, void>({
+    // get all active events
+    getAllEvents: builder.query<
+      { success: boolean; message: string; data: TEvent[] },
+      void
+    >({
       query: () => {
         return {
           url: "/api/event",

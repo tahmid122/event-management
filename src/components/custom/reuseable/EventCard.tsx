@@ -5,7 +5,6 @@ interface Props {
   event: TEvent;
 }
 const EventCard = ({ event }: Props) => {
-  console.log(event);
   return (
     <div className="max-w-md rounded-2xl bg-black border border-slate-900 shadow-lg overflow-hidden">
       {/* Image */}
