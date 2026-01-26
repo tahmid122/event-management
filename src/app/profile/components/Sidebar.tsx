@@ -5,6 +5,8 @@ import { FaCalendarCheck } from "react-icons/fa6";
 import ManagerLinks from "./ManagerLinks";
 import { useAppSelector } from "@/redux/store";
 import { useCurrentUser } from "@/redux/authSlice";
+import { FaTicketAlt } from "react-icons/fa";
+
 const Sidebar = () => {
   // logged in user
   const user = useAppSelector(useCurrentUser);
@@ -26,6 +28,13 @@ const Sidebar = () => {
                 text="Create Event"
                 link="/profile/create-events"
                 icon={<FaPlusCircle />}
+              />
+            </li>
+            <li>
+              <NavLink
+                text="My Bookings"
+                link="/profile/my-bookings"
+                icon={<FaTicketAlt />}
               />
             </li>
           </>

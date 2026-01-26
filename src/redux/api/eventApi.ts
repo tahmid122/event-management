@@ -73,6 +73,17 @@ const eventApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["my-events", "events"],
     }),
+    // get single event details
+    getSingleEvent: builder.query({
+      query: (id: string) => {
+        return {
+          url: `/api/event/${id}`,
+        };
+      },
+      providesTags(result, error, id) {
+        return [{ type: "events", id: id }];
+      },
+    }),
   }),
 });
 
@@ -83,4 +94,5 @@ export const {
   usePublishAnEventMutation,
   useDeleteAnEventMutation,
   useUpdateAnEventMutation,
+  useGetSingleEventQuery,
 } = eventApi;
