@@ -1,5 +1,6 @@
 import { TEvent } from "@/types/event";
 import { baseApi } from "./baseApi";
+import { TPayment } from "@/types/payment";
 
 const eventApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -84,6 +85,28 @@ const eventApi = baseApi.injectEndpoints({
         return [{ type: "events", id: id }];
       },
     }),
+    // get my bookings
+    getBookings: builder.query<
+      { success: boolean; message: string; data: TPayment[] },
+      void
+    >({
+      query: () => {
+        return {
+          url: "/api/ticket/my-tickets",
+        };
+      },
+      providesTags: ["bookings"],
+    }),
+    // buy ticket
+    buyTicket: builder.mutation({
+      query: (event_id) => {
+        return {
+          url: "/api/ticket/buy",
+          method: "POST",
+          body: { event_id: event_id },
+        };
+      },
+    }),
   }),
 });
 
@@ -95,4 +118,6 @@ export const {
   useDeleteAnEventMutation,
   useUpdateAnEventMutation,
   useGetSingleEventQuery,
+  useGetBookingsQuery,
+  useBuyTicketMutation,
 } = eventApi;

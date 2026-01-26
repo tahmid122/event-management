@@ -1,5 +1,9 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { useBuyTicketMutation } from "@/redux/api/eventApi";
 import { TEvent } from "@/types/event";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FaCalendarAlt,
   FaMapMarkerAlt,
@@ -10,6 +14,17 @@ interface Props {
   event: TEvent;
 }
 const EventDetails = ({ event }: Props) => {
+  const router = useRouter();
+  const [buyTicket, { isLoading }] = useBuyTicketMutation();
+
+  const handlePayment = async () => {
+    const res = await buyTicket(event.id).unwrap();
+    if (res.success) {
+      router.push(
+        `/events/checkout/${res.data.ticketId}?client_secret=${res.data.clientSecret}`,
+      );
+    }
+  };
   return (
     <div className="min-h-screen bg-black px-4 py-10">
       <div className="mx-auto max-w-6xl">
@@ -76,7 +91,9 @@ const EventDetails = ({ event }: Props) => {
                 </span>
               </div>
 
-              <Button className="w-full mt-5">Book Now</Button>
+              <Button onClick={handlePayment} className="w-full mt-5">
+                {isLoading ? "Booking..." : "Book Now"}
+              </Button>
 
               <p className="mt-3 text-center text-xs text-whiter">
                 Free cancellation up to 24 hours before event

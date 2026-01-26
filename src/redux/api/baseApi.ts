@@ -48,7 +48,7 @@ const baseQueryWithToken: BaseQueryFn<
 };
 
 const eventTags = ["events", "event", "my-events"];
-const userTags = ["user"];
+const userTags = ["user", "bookings"];
 
 export const baseApi = createApi({
   reducerPath: "baseApi",
