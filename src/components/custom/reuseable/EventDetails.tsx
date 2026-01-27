@@ -29,7 +29,7 @@ const EventDetails = ({ event }: Props) => {
     <div className="min-h-screen bg-black px-4 py-10">
       <div className="mx-auto max-w-6xl">
         {/* Header / Hero */}
-        <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+        <div className="overflow-hidden rounded-2xl  shadow-sm">
           <div className="relative h-64 bg-linear-to-r to-pinkish from-purple-600">
             <div className="absolute inset-0 bg-black/30" />
             <div className="relative z-10 flex h-full flex-col justify-end p-6 text-white">
