@@ -14,7 +14,7 @@ const SingleEventDetails = () => {
       {isLoading ? (
         <div className="min-h-screen w-full flex items-center justify-center   bg-black px-4 py-10">
           <Card
-            className="w-full max-w-1/5  bg-black border-slate-900"
+            className="w-full bg-black border-slate-900"
             style={{ width: "450px", height: "450px" }}
           >
             <CardHeader>

@@ -28,7 +28,7 @@ const NavbarActionButtonsClient = () => {
     <div className="hidden lg:flex items-center gap-2">
       {user?.email ? (
         <>
-          <Link href={"/profile"} className="font-bold mr-5">
+          <Link href={"/profile"} className="font-bold mr-5 underline">
             {user.name}
           </Link>
           <Button

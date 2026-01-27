@@ -48,7 +48,7 @@ const MobileNavlinks = () => {
         <DrawerTrigger asChild>
           <FaBars className="text-xl text-whiter cursor-pointer" />
         </DrawerTrigger>
-        <DrawerContent className="bg-black text-whiter border-none p-5">
+        <DrawerContent className="bg-black text-whiter border-none p-5 z-999">
           <DialogTitle></DialogTitle>
           <DrawerClose asChild className="flex items-end justify-end w-full">
             <div>
@@ -81,6 +81,11 @@ const MobileNavlinks = () => {
             </li>
             <li>
               <NavLink text="Contact" link="/contact" icon={<FaEnvelope />} />
+            </li>
+            <li>
+              <Link href={"/profile"} className="font-bold mr-5 underline">
+                {user?.name}
+              </Link>
             </li>
             <li className="flex gap-2 flex-wrap mt-5">
               {user?.email ? (

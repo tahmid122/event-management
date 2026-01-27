@@ -6,7 +6,7 @@ interface Props {
 }
 const EventCard = ({ event }: Props) => {
   return (
-    <div className="max-w-md rounded-2xl bg-black border border-slate-900 shadow-lg overflow-hidden">
+    <div className="rounded-2xl bg-black border border-slate-900 shadow-lg overflow-hidden">
       {/* Image */}
       {event.image && (
         <img

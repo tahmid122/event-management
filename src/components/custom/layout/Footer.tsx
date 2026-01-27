@@ -5,7 +5,7 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <footer className="py-5 border-t border-t-gray-950">
-      <section className="container flex items-center justify-between">
+      <section className="container flex flex-col sm:flex-row gap-2 flex-wrap justify-center items-center sm:justify-between">
         {/* Social Links */}
         <div className="flex items-center gap-3">
           <a
@@ -30,8 +30,6 @@ const Footer = () => {
             <FaGithub className="text-lg" />
           </a>
         </div>
-        {/* Logo */}
-        <Logo />
         {/* copyright text */}
         <p className="text-sm">
           &copy; All rights reserved by{" "}

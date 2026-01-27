@@ -11,7 +11,7 @@ const Sidebar = () => {
   // logged in user
   const user = useAppSelector(useCurrentUser);
   return (
-    <aside className="border h-full border-slate-950 p-4 min-w-50">
+    <aside className="border h-screen border-slate-950 p-4 min-w-50">
       <h2 className="text-xl font-semibold">☪️ Dashboard ☪️</h2>
       <ul className="flex flex-col gap-4 mt-5">
         {user?.role !== "MANAGER" && (

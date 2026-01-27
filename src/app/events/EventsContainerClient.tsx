@@ -66,7 +66,7 @@ const EventsContainerClient = () => {
       {isLoading || searching ? (
         <SkeletonUI count={12} />
       ) : (
-        <div className="grid grid-cols-4 gap-5 p-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 p-5">
           {data?.success &&
             events.map((singleEvent) => (
               <EventCard key={singleEvent.id} event={singleEvent} />
