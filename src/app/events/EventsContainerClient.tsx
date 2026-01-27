@@ -5,6 +5,7 @@ import { useGetAllEventsQuery } from "@/redux/api/eventApi";
 import { useEffect, useState } from "react";
 import EventSearch from "./EventSearch";
 import { TEvent } from "@/types/event";
+import SkeletonUI from "@/components/custom/reuseable/SkeletonUI";
 
 const EventsContainerClient = () => {
   const { data, isLoading } = useGetAllEventsQuery();
@@ -36,9 +37,7 @@ const EventsContainerClient = () => {
       clearTimeout(timer);
     };
   }, [query]);
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
+  if (isLoading) return <SkeletonUI count={12} />;
   return (
     <section className="py-5">
       <EventSearch setQuery={setQuery} />
