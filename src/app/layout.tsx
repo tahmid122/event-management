@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import { Providers } from "./providers";
 import Navbar from "@/components/custom/layout/Navbar";
 import Footer from "@/components/custom/layout/Footer";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const montserrat = Montserrat({
   variable: "--montserrat",
@@ -21,13 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${montserrat.variable} antialiased`}>
-        <Providers>
-          <Navbar />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-        </Providers>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Providers>
+            <Navbar />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

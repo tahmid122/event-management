@@ -5,13 +5,9 @@ import {
   FaMapMarkerAlt,
   FaBlog,
   FaEnvelope,
-  FaSignInAlt,
-  FaUserPlus,
 } from "react-icons/fa";
 
-import Link from "next/link";
 import NavLink from "../reuseable/NavLink";
-import { Button } from "@/components/ui/button";
 import MobileNavlinks from "./MobileNavlinks";
 import Logo from "../reuseable/Logo";
 import NavbarActionButtonsClient from "./NavbarActionButtonsClient";
