@@ -4,25 +4,31 @@ import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import { useAppSelector } from "@/redux/store";
 import { useCurrentUser } from "@/redux/authSlice";
+import { useParams } from "next/navigation";
 
 type ChatMessage = {
   id: string;
   content: string;
-  senderId: string;
+  senderId?: string;
   senderName?: string;
   createdAt?: string;
   isMe: boolean;
 };
 
-const WS_URL = "ws://10.0.20.216:5000";
-const AUTH_TOKEN = Cookies.get("access_token");
+const WS_URL =
+  "ws://10.0.20.216:4000?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNta3c0cXZjZjAwMG9oc3V5bTVqazZudGciLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2OTQ5MDkxNiwiZXhwIjoxNzY5NTE2MTE2fQ.fbnz2UOFuF7tQ_q1LTkDZWzcpOh6jsnGLCF2-blvK6k";
+const AUTH_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNta3c0cXZjZjAwMG9oc3V5bTVqazZudGciLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc2OTQ5MDkxNiwiZXhwIjoxNzY5NTE2MTE2fQ.fbnz2UOFuF7tQ_q1LTkDZWzcpOh6jsnGLCF2-blvK6k";
 
 const generateId = () =>
   Date.now().toString() + Math.random().toString(36).slice(2);
 
 const ChatApp = () => {
+  const { id: TICKET_ID }: { id: string } = useParams();
+
   const user = useAppSelector(useCurrentUser);
   const MY_USER_ID = user?.id;
+
   const socketRef = useRef<WebSocket | null>(null);
   const didInitRef = useRef(false);
 
@@ -31,15 +37,15 @@ const ChatApp = () => {
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    // 🔒 Prevent React 18 StrictMode double connect
+    // 🚫 Prevent React 18 StrictMode double connect
     if (didInitRef.current) return;
     didInitRef.current = true;
 
-    const ws = new WebSocket(`${WS_URL}/?token=${AUTH_TOKEN}`);
+    const ws = new WebSocket(`${WS_URL}`);
     socketRef.current = ws;
 
     ws.onopen = () => {
-      console.log("✅ WebSocket Connected");
+      console.log("✅ WebSocket connected");
       setIsConnected(true);
     };
 
@@ -49,23 +55,30 @@ const ChatApp = () => {
       try {
         const data = JSON.parse(event.data);
 
-        if (data.type === "MESSAGE" && data.message) {
-          const msg = data.message;
-
+        /**
+         * Expected server payload example:
+         * {
+         *   type: "MESSAGE",
+         *   ticketId: "...",
+         *   message: "Hello",
+         *   senderId: "user123",
+         *   senderName: "John"
+         * }
+         */
+        if (data.type === "MESSAGE") {
           setMessages((prev) => [
             ...prev,
             {
-              id: msg.id,
-              content: msg.content,
-              senderId: msg.senderId,
-              senderName: msg.sender?.name,
-              createdAt: msg.createdAt,
-              isMe: msg.senderId === MY_USER_ID,
+              id: generateId(),
+              content: data.message,
+              senderId: data.senderId,
+              senderName: data.senderName,
+              isMe: data.senderId === MY_USER_ID,
             },
           ]);
         }
       } catch (err) {
-        console.error("❌ Message parse error:", err);
+        console.error("❌ WS parse error:", err);
       }
     };
 
@@ -74,15 +87,13 @@ const ChatApp = () => {
     };
 
     ws.onclose = (e) => {
-      console.log("🔌 Socket closed:", e.code);
+      console.log("🔌 WebSocket closed:", e.code);
       setIsConnected(false);
       socketRef.current = null;
     };
 
     return () => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.close();
-      }
+      ws.close();
     };
   }, []);
 
@@ -99,21 +110,19 @@ const ChatApp = () => {
 
     const payload = {
       type: "SEND_MESSAGE",
-      receiverId: "cmkuztk1g0005h8uybi8wvuyo",
-      chatId: "cmkqq9xcg0000k0uy5e7u8wq7",
+      ticketId: TICKET_ID,
       message: input.trim(),
     };
 
     socketRef.current.send(JSON.stringify(payload));
     console.log("📤 Sent:", payload);
 
-    // ⚡ Optimistic UI update
+    // ⚡ Optimistic UI
     setMessages((prev) => [
       ...prev,
       {
         id: generateId(),
         content: input,
-        senderId: MY_USER_ID,
         isMe: true,
       },
     ]);
@@ -130,7 +139,7 @@ const ChatApp = () => {
           }`}
         />
         <h1 className="text-xl font-bold">
-          Chat {isConnected ? "(Online)" : "(Offline)"}
+          Ticket Chat {isConnected ? "(Online)" : "(Offline)"}
         </h1>
       </div>
 
@@ -164,7 +173,7 @@ const ChatApp = () => {
           onChange={(e) => setInput(e.target.value)}
           disabled={!isConnected}
           placeholder={isConnected ? "Type a message…" : "Connecting…"}
-          className="flex-1 p-3 rounded text-whiter border border-slate-900"
+          className="flex-1 p-3 rounded text-white border border-slate-900"
         />
         <button
           type="submit"

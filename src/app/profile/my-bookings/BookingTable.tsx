@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useCancelTicketMutation } from "@/redux/api/eventApi";
+import Link from "next/link";
 interface Props {
   bookings: TPayment[] | undefined;
 }
@@ -22,6 +23,7 @@ const BookingTable = ({ bookings }: Props) => {
     const res = await cancelPayment(id);
     console.log(res);
   };
+  console.log(bookings);
   return (
     <div className="rounded-xl border border-slate-900 bg-black p-6">
       <h2 className="mb-4 text-lg font-semibold text-white">My Bookings</h2>
@@ -35,6 +37,7 @@ const BookingTable = ({ bookings }: Props) => {
             <TableHead className="text-right text-whiter">Status</TableHead>
             <TableHead className="text-right text-whiter">Date</TableHead>
             <TableHead className="text-right text-whiter">Action</TableHead>
+            <TableHead className="text-right text-whiter">Chat</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -81,6 +84,15 @@ const BookingTable = ({ bookings }: Props) => {
                   ) : (
                     <span> {booking.status}</span>
                   )}
+                </TableCell>
+                <TableCell className="py-3 text-slate-400 text-center">
+                  <Link
+                    href={`/chat/${booking.id}`}
+                    className="text-blue-600 font-semibold"
+                    style={{ color: "blue" }}
+                  >
+                    Start Chat
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}

@@ -44,9 +44,6 @@ const Navbar = () => {
             <li>
               <NavLink text="Charts" link="/charts" icon={<FaBlog />} />
             </li>
-            <li>
-              <NavLink text="Chat" link="/chat" icon={<FaEnvelope />} />
-            </li>
           </ul>
           {/* buttons */}
           <NavbarActionButtonsClient />
