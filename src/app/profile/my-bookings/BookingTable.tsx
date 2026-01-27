@@ -70,9 +70,7 @@ const BookingTable = ({ bookings }: Props) => {
                   {new Date(booking.created_at).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="py-3 pr-4 text-center">
-                  {booking.status === "CANCELLED" ? (
-                    <span> {booking.status}</span>
-                  ) : (
+                  {booking.status === "PAID" ? (
                     <Button
                       onClick={() => handleCancelPayment(booking.id)}
                       disabled={isLoading}
@@ -80,6 +78,8 @@ const BookingTable = ({ bookings }: Props) => {
                     >
                       Cancel
                     </Button>
+                  ) : (
+                    <span> {booking.status}</span>
                   )}
                 </TableCell>
               </TableRow>
