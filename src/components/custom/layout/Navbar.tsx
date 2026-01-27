@@ -42,7 +42,7 @@ const Navbar = () => {
               />
             </li>
             <li>
-              <NavLink text="Blogs" link="/blogs" icon={<FaBlog />} />
+              <NavLink text="Charts" link="/charts" icon={<FaBlog />} />
             </li>
             <li>
               <NavLink text="Chat" link="/chat" icon={<FaEnvelope />} />
