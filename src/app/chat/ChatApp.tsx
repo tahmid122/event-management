@@ -442,7 +442,7 @@ const ChatApp = () => {
                         className={`px-4 py-2 rounded-2xl ${
                           msg.isMe
                             ? "bg-blue-600 text-white rounded-br-md"
-                            : "bg-black text-gray-900 border border-slate-900 rounded-bl-md"
+                            : "bg-black text-whiter border border-slate-900 rounded-bl-md"
                         }`}
                       >
                         <p className="text-sm break-words whitespace-pre-wrap">
